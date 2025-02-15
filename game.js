@@ -1,60 +1,72 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const coordinateElement = document.getElementById("coordinate");
-    const whiteButton = document.getElementById("white");
-    const darkButton = document.getElementById("dark");
-    const restartButton = document.getElementById("restart");
-    const messageElement = document.getElementById("message");
-    const scoreElement = document.getElementById("score");
-
+document.addEventListener('DOMContentLoaded', function() {
     let score = 0;
-    let currentCoordinate = "";
+    let scoreHistory = [];
+    
+    const coordinateEl = document.getElementById('coordinate');
+    const scoreEl = document.getElementById('score');
+    const messageEl = document.getElementById('message');
+    const scoreHistoryEl = document.getElementById('score-history');
+    const btnWhite = document.getElementById('btn-white');
+    const btnDark = document.getElementById('btn-dark');
 
-    function getRandomCoordinate() {
-        const files = ["A", "B", "C", "D", "E", "F", "G", "H"];
-        const ranks = [1, 2, 3, 4, 5, 6, 7, 8];
-        const file = files[Math.floor(Math.random() * 8)];
-        const rank = ranks[Math.floor(Math.random() * 8)];
-        return file + rank;
+    let currentCoordinate = '';
+
+    function generateCoordinate() {
+        const letters = ['A','B','C','D','E','F','G','H'];
+        const numbers = [1,2,3,4,5,6,7,8];
+        const letter = letters[Math.floor(Math.random() * letters.length)];
+        const number = numbers[Math.floor(Math.random() * numbers.length)];
+        return letter + number;
     }
 
-    function getSquareColor(coordinate) {
-        const file = coordinate.charCodeAt(0) - "A".charCodeAt(0);
-        const rank = parseInt(coordinate[1]) - 1;
-        return (file + rank) % 2 === 0 ? "dark" : "white";
+    function getSquareColor(coord) {
+        const letter = coord.charAt(0).toUpperCase();
+        const row = parseInt(coord.charAt(1));
+        const letterNumber = letter.charCodeAt(0) - 64;
+        return (letterNumber + row) % 2 === 0 ? 'dark' : 'white';
     }
 
-    function nextRound() {
-        currentCoordinate = getRandomCoordinate();
-        coordinateElement.textContent = currentCoordinate;
-        messageElement.textContent = "";
+    function updateScoreHistory() {
+        scoreHistoryEl.innerHTML = "";
+        scoreHistory.forEach(s => {
+            const li = document.createElement("li");
+            li.textContent = s;
+            scoreHistoryEl.appendChild(li);
+        });
     }
 
-    function handleGuess(color) {
-        const correctColor = getSquareColor(currentCoordinate);
+    function newRound(reset = false) {
+        if (reset) {
+            scoreHistory.push(score);
+            score = 0;
+            updateScoreHistory();
+        }
 
-        if (color === correctColor) {
+        scoreEl.textContent = score;
+        currentCoordinate = generateCoordinate();
+        coordinateEl.textContent = currentCoordinate;
+        messageEl.textContent = '';
+    }
+
+    function checkAnswer(userGuess) {
+        if (getSquareColor(currentCoordinate) === userGuess) {
             score++;
-            scoreElement.textContent = `Score: ${score}`;
-            nextRound();
+            scoreEl.textContent = score;
+            messageEl.textContent = 'Correto!';
+            newRound();
         } else {
-            messageElement.textContent = `Game Over! Pontuação final: ${score}`;
-            whiteButton.style.display = "none";
-            darkButton.style.display = "none";
-            restartButton.style.display = "block";
+            messageEl.textContent = `Errado! Pontuação final: ${score}`;
+            newRound(true);
         }
     }
 
-    whiteButton.addEventListener("click", () => handleGuess("white"));
-    darkButton.addEventListener("click", () => handleGuess("dark"));
-
-    restartButton.addEventListener("click", () => {
-        score = 0;
-        scoreElement.textContent = "Score: 0";
-        whiteButton.style.display = "inline-block";
-        darkButton.style.display = "inline-block";
-        restartButton.style.display = "none";
-        nextRound();
+    btnWhite.addEventListener('click', function() {
+        checkAnswer('white');
     });
 
-    nextRound();
+    btnDark.addEventListener('click', function() {
+        checkAnswer('dark');
+    });
+
+    newRound();
 });
