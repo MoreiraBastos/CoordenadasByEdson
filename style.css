@@ -27,6 +27,12 @@ button {
     width: 120px;
     border-radius: 5px;
     border: none;
+    cursor: pointer; /* 🔹 Garante que o cursor muda ao passar sobre os botões */
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; /* 🔹 Evita confusão quando o botão estiver desativado */
 }
 
 #btn-white {
