@@ -46,6 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
         currentCoordinate = generateCoordinate();
         coordinateEl.textContent = currentCoordinate;
         messageEl.textContent = '';
+
+        // **✅ Reativar botões sempre que começar nova rodada**
+        btnWhite.disabled = false;
+        btnDark.disabled = false;
     }
 
     function checkAnswer(userGuess) {
@@ -56,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newRound();
         } else {
             messageEl.textContent = `Errado! Pontuação final: ${score}`;
+            // **✅ Reiniciar jogo ao errar, mas reativando botões**
             newRound(true);
         }
     }
