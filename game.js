@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     let score = 0;
     let scoreHistory = [];
-    
+
     const coordinateEl = document.getElementById('coordinate');
     const scoreEl = document.getElementById('score');
     const messageEl = document.getElementById('message');
     const scoreHistoryEl = document.getElementById('score-history');
     const btnWhite = document.getElementById('btn-white');
     const btnDark = document.getElementById('btn-dark');
+
+    const correctSound = new Audio('correct.mp3'); // 🔊 Som de acerto
+    const failSound = new Audio('fail.mp3');       // 🔊 Som de erro
 
     let currentCoordinate = '';
 
@@ -43,21 +46,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         scoreEl.textContent = score;
-        currentCoordinate = generateCoordinate(); // **🔹 Gera uma nova coordenada corretamente**
+        currentCoordinate = generateCoordinate();
         coordinateEl.textContent = currentCoordinate;
         messageEl.textContent = '';
 
-        // **🔹 Reativa os botões para nova jogada**
         btnWhite.disabled = false;
         btnDark.disabled = false;
     }
 
     function checkAnswer(userGuess) {
         if (getSquareColor(currentCoordinate) === userGuess) {
+            correctSound.play(); // 🔊 Toca som de acerto
             score++;
             messageEl.textContent = 'Correto!';
             newRound();
         } else {
+            failSound.play(); // 🔊 Toca som de erro
             messageEl.textContent = `Errado! Pontuação final: ${score}`;
             newRound(true);
         }
@@ -71,5 +75,5 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAnswer('dark');
     });
 
-    newRound(); // **🔹 Chamada inicial para garantir que a coordenada muda**
+    newRound();
 });
