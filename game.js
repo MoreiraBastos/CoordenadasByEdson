@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     let score = 0;
     let scoreHistory = [];
-
+    
     const coordinateEl = document.getElementById('coordinate');
     const scoreEl = document.getElementById('score');
     const messageEl = document.getElementById('message');
     const scoreHistoryEl = document.getElementById('score-history');
+    const playerNameInput = document.getElementById('player-name');
+    const topScoresEl = document.getElementById('top-scores');
     const btnWhite = document.getElementById('btn-white');
     const btnDark = document.getElementById('btn-dark');
 
-    const correctSound = new Audio('correct.mp3'); // 🔊 Som de acerto
-    const failSound = new Audio('fail.mp3');       // 🔊 Som de erro
+    const correctSound = new Audio('correct.mp3'); 
+    const failSound = new Audio('fail.mp3'); 
 
     let currentCoordinate = '';
 
@@ -38,15 +40,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function updateTopScores() {
+        const topScores = JSON.parse(localStorage.getItem('topScores')) || [];
+        topScoresEl.innerHTML = "<h3>Top 5 Jogadores</h3>";
+        
+        topScores.forEach((entry, index) => {
+            const li = document.createElement("li");
+            li.textContent = `${index + 1}. ${entry.name} - ${entry.score}`;
+            topScoresEl.appendChild(li);
+        });
+    }
+
+    function saveScore(name, score) {
+        if (!name) return; // Evita salvar sem nome
+
+        let topScores = JSON.parse(localStorage.getItem('topScores')) || [];
+        topScores.push({ name, score });
+        
+        // Ordena do maior para o menor
+        topScores.sort((a, b) => b.score - a.score);
+
+        // Mantém apenas os top 5
+        topScores = topScores.slice(0, 5);
+        
+        localStorage.setItem('topScores', JSON.stringify(topScores));
+        updateTopScores();
+    }
+
     function newRound(reset = false) {
         if (reset) {
+            const playerName = playerNameInput.value.trim() || "Jogador Anônimo";
+            saveScore(playerName, score);
             scoreHistory.push(score);
             score = 0;
             updateScoreHistory();
         }
 
         scoreEl.textContent = score;
-        currentCoordinate = generateCoordinate();
+        currentCoordinate = generateCoordinate(); 
         coordinateEl.textContent = currentCoordinate;
         messageEl.textContent = '';
 
@@ -56,12 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function checkAnswer(userGuess) {
         if (getSquareColor(currentCoordinate) === userGuess) {
-            correctSound.play(); // 🔊 Toca som de acerto
+            correctSound.currentTime = 0;
+            correctSound.play();
             score++;
             messageEl.textContent = 'Correto!';
             newRound();
         } else {
-            failSound.play(); // 🔊 Toca som de erro
+            failSound.currentTime = 0;
+            failSound.play();
             messageEl.textContent = `Errado! Pontuação final: ${score}`;
             newRound(true);
         }
@@ -75,5 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAnswer('dark');
     });
 
+    updateTopScores();
     newRound();
 });
