@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         scoreHistoryEl.innerHTML = "";
         scoreHistory.forEach(s => {
             const li = document.createElement("li");
-            li.textContent = s;
+            li.textContent = `Pontuação: ${s}`;
             scoreHistoryEl.appendChild(li);
         });
     }
@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         scoreEl.textContent = score;
-        currentCoordinate = generateCoordinate();
+        currentCoordinate = generateCoordinate(); // **🔹 Gera uma nova coordenada corretamente**
         coordinateEl.textContent = currentCoordinate;
         messageEl.textContent = '';
 
-        // **✅ Reativar botões sempre que começar nova rodada**
+        // **🔹 Reativa os botões para nova jogada**
         btnWhite.disabled = false;
         btnDark.disabled = false;
     }
@@ -55,12 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkAnswer(userGuess) {
         if (getSquareColor(currentCoordinate) === userGuess) {
             score++;
-            scoreEl.textContent = score;
             messageEl.textContent = 'Correto!';
             newRound();
         } else {
             messageEl.textContent = `Errado! Pontuação final: ${score}`;
-            // **✅ Reiniciar jogo ao errar, mas reativando botões**
             newRound(true);
         }
     }
@@ -73,5 +71,5 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAnswer('dark');
     });
 
-    newRound();
+    newRound(); // **🔹 Chamada inicial para garantir que a coordenada muda**
 });
