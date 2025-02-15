@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function saveScore(name, score) {
-        if (!name) return; // Evita salvar sem nome
+        if (!name.trim()) return; // Evita salvar sem nome
 
         let topScores = JSON.parse(localStorage.getItem('topScores')) || [];
         topScores.push({ name, score });
-        
+
         // Ordena do maior para o menor
         topScores.sort((a, b) => b.score - a.score);
 
