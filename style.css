@@ -38,3 +38,8 @@ button {
     background-color: black;
     color: white;
 }
+
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+}
