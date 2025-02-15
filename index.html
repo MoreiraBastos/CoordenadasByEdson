@@ -3,24 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo das Cores</title>
-    <link rel="manifest" href="manifest.json">
+    <title>Coordenadas - Jogo</title>
     <script src="game.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Jogo das Cores">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('./chess-background.jpg');
+            background-size: cover;
+            filter: brightness(50%);
+            text-align: center;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 255, 0.5);
+            color: white;
+            margin: 100px auto;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .btn {
+            margin: 10px;
+        }
+
+        #restart {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Jogo das Cores</h1>
-        <p>Adivinhe se a casa é <strong>White</strong> ou <strong>Dark</strong>!</p>
-        <div id="coordinate">A1</div>
-        <button id="btn-white">White</button>
-        <button id="btn-dark">Dark</button>
-        <p>Pontuação: <span id="score">0</span></p>
+        <h1>Coordenadas</h1>
+        <p>Qual a cor da casa?</p>
+        <h2 id="coordinate">A1</h2>
+        <button id="white" class="btn btn-light">White</button>
+        <button id="dark" class="btn btn-dark">Dark</button>
+        <p id="score">Score: 0</p>
         <p id="message"></p>
+        <button id="restart" class="btn btn-danger">Reiniciar</button>
     </div>
+
 </body>
 </html>
